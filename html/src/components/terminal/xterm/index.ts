@@ -192,7 +192,7 @@ export class Xterm {
             terminal.onSelectionChange(() => {
                 if (this.terminal.getSelection() === '') return;
                 try {
-                    document.execCommand('copy');
+                    navigator.clipboard.writeText(this.terminal.getSelection()).catch(() => {});
                 } catch (e) {
                     return;
                 }
