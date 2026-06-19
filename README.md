@@ -21,6 +21,7 @@ ttyd is a simple command-line tool for sharing terminal over the web.
 - Run any custom command with options
 - Basic authentication support and many other custom options
 - Cross platform: macOS, Linux, FreeBSD/OpenBSD, [OpenWrt](https://openwrt.org), Windows
+- Desktop notification bridging: forward D-Bus notifications to the browser
 
 # Installation
 
@@ -75,6 +76,8 @@ OPTIONS:
     -I, --index             Custom index.html path
     -b, --base-path         Expected base path for requests coming from a reverse proxy (eg: /mounted/here, max length: 128)
     -P, --ping-interval     Websocket ping interval(sec) (default: 5)
+    -f, --srv-buf-size      Maximum chunk of file (in bytes) that can be sent at once, a larger value may improve throughput (default: 4096)
+    -N, --monitor-notifications  Monitor desktop notifications via D-Bus and forward to browser
     -6, --ipv6              Enable IPv6 support
     -S, --ssl               Enable SSL
     -C, --ssl-cert          SSL certificate file path

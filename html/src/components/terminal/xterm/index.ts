@@ -28,6 +28,7 @@ enum Command {
     OUTPUT = '0',
     SET_WINDOW_TITLE = '1',
     SET_PREFERENCES = '2',
+    NOTIFICATION = '3',
 
     // client side
     INPUT = '0',
@@ -361,9 +362,27 @@ export class Xterm {
                     ...this.parseOptsFromUrlQuery(window.location.search),
                 } as Preferences);
                 break;
+            case Command.NOTIFICATION:
+                this.showNotification(textDecoder.decode(data));
+                break;
             default:
                 console.warn(`[ttyd] unknown command: ${cmd}`);
                 break;
+        }
+    }
+
+    @bind
+    private showNotification(jsonStr: string) {
+        if (Notification.permission === 'denied') return;
+        if (Notification.permission === 'default') {
+            Notification.requestPermission();
+            return;
+        }
+        try {
+            const { app, summary, body } = JSON.parse(jsonStr);
+            new Notification(`[${app}] ${summary}`, { body: body });
+        } catch (e) {
+            console.warn('[ttyd] failed to parse notification:', e);
         }
     }
 
