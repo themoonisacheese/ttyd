@@ -202,6 +202,8 @@ export class Xterm {
         );
         register(addEventListener(window, 'resize', () => fitAddon.fit()));
         register(addEventListener(window, 'beforeunload', this.onWindowUnload));
+        register(addEventListener(window, 'focus', () => this.sendData('\x1b[I')));
+        register(addEventListener(window, 'blur', () => this.sendData('\x1b[O')));
     }
 
     @bind
@@ -264,6 +266,9 @@ export class Xterm {
         const { textEncoder, terminal, overlayAddon } = this;
         const msg = JSON.stringify({ AuthToken: this.token, columns: terminal.cols, rows: terminal.rows });
         this.socket?.send(textEncoder.encode(msg));
+
+        // Enable focus reporting so DECRPM ?1004$p returns "supported" (Crush notifications)
+        terminal.write('\x1b[?1004h');
 
         if (this.opened) {
             terminal.reset();
